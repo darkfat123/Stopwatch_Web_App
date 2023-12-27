@@ -1,67 +1,64 @@
-// public/script.js
+$(document).ready(() => {
+  const socket = io();
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Function to update datetime
-    const updateDatetime = () => {
-      // Fetch datetime from the server
-      fetch('/datetime')
-        .then(response => response.text())
-        .then(datetime => {
-          // Update the HTML with the received datetime
-          document.getElementById('datetime').innerText = datetime;
-        })
-        .catch(error => console.error('Error fetching datetime:', error));
-    };
+  let timer;
+  let seconds = 0;
+  let lapCounter = 1;
 
-    const hello = () => {
-        // Fetch datetime from the server
-        fetch('/hello')
-          .then(response => response.text())
-          .then(hello => {
-            // Update the HTML with the received datetime
-            document.getElementById('hello').innerText = hello;
-          })
-          .catch(error => console.error('Error fetching text:', error));
-      };
-  
-    // Function to update count
-    const updateCount = () => {
-      // Fetch count from the server
-      fetch('/count')
-        .then(response => response.json())
-        .then(data => {
-          // Update the HTML with the received count
-          document.getElementById('number').innerText = data.count;
-        })
-        .catch(error => console.error('Error fetching count:', error));
-    };
-  
-    // Set interval to update datetime every 1000 ms (1 second)
-    setInterval(updateDatetime, 1000);
-    setInterval(hello,2000);
-    // Set interval to update count every 5000 ms (5 seconds)
-    setInterval(updateCount, 5000);
-  
-    // Add event listener to the "More" button
-    const moreButton = document.getElementById('moreButton');
-    moreButton.addEventListener('click', () => {
-      // Increment the number and update the HTML
-      const numberElement = document.getElementById('number');
-      const currentNumber = parseInt(numberElement.innerText, 10);
-      const newNumber = currentNumber + 1;
-      numberElement.innerText = newNumber;
-  
-      // Send the updated number to the server
-      fetch('/updateNumber', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ number: newNumber }),
-      })
-      .then(response => response.json())
-      .then(data => console.log('Number updated successfully:', data))
-      .catch(error => console.error('Error updating number:', error));
-    });
+  function displayTime() {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+
+    const displayString = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    $('#display').text(displayString);
+  }
+
+  $('#start').click(() => {
+    socket.emit('start');
+    timer = setInterval(() => {
+      seconds++;
+      displayTime();
+    }, 1000);
   });
-  
+
+  $('#stop').click(() => {
+    socket.emit('stop');
+    clearInterval(timer);
+  });
+
+  $('#reset').click(() => {
+    socket.emit('reset');
+    clearInterval(timer);
+    seconds = 0;
+    lapCounter = 1;
+    displayTime();
+    $('#lapList').empty();
+  });
+
+  $('#lap').click(() => {
+    const lapTime = $('#display').text();
+    $('#lapList').append(`<li>Lap ${lapCounter}: ${lapTime}</li>`);
+    lapCounter++;
+  });
+
+  socket.on('start', () => {
+    clearInterval(timer);
+    timer = setInterval(() => {
+      seconds++;
+      displayTime();
+    }, 1000);
+  });
+
+  socket.on('stop', () => {
+    clearInterval(timer);
+  });
+
+  socket.on('reset', () => {
+    clearInterval(timer);
+    seconds = 0;
+    lapCounter = 1;
+    displayTime();
+    $('#lapList').empty();
+  });
+});
