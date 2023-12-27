@@ -46,7 +46,7 @@ $(document).ready(() => {
 
   $('#lap').click(() => {
     const lapTime = $('#display').text();
-    $('#lapList').append(`<li>Lap ${lapCounter}: ${lapTime}</li>`);
+    $('#lapList').append(`<li>รอบที่ ${lapCounter}: ${lapTime}</li>`);
     lapCounter++;
   });
 
