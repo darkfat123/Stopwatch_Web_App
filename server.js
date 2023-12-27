@@ -14,10 +14,6 @@ app.get('/datetime', (req, res) => {
   res.send(currentDatetime);
 });
 
-app.get('/hello', (req, res) => {
-  res.send("hello world!");
-});
-
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });

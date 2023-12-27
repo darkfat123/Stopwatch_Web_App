@@ -1,20 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt&display=swap');
+
+
 body {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
   margin: 0;
+  background-color: #161A30;
 }
 
 .stopwatch {
   text-align: center;
+  font-family: 'Prompt', sans-serif;
+  color: white;
+}
+
+#watch {
+  font-size: 3.5em;
 }
 
 #display {
-  font-size: 3em;
+  font-size: 4em;
 }
 
 button {
-  font-size: 1.5em;
-  margin: 10px;
+  background-image: linear-gradient(92.88deg, #CD5C08 9.16%, #EE9322 43.89%, #E9B824 64.72%);
+  border-radius: 8px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-family: 'Prompt', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  height: 4rem;
+  padding: 0 1.6rem;
+  text-align: center;
+  text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+  transition: all .5s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+#start:disabled {
+  background-image: linear-gradient(92.88deg, #EEE7DA 9.16%, #F2F1EB 43.89%, #FBF6EE 64.72%);
+  border-radius: 8px;
+  border-style: none;
+  box-sizing: border-box;
+  color: black;
+  cursor: not-allowed;
+  flex-shrink: 0;
+  font-family: 'Prompt', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  height: 4rem;
+  text-align: center;
+  transition: all .5s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+button:hover {
+  box-shadow: rgba(233, 138, 75, 0.5) 0 1px 30px;
+  transition-duration: .1s;
+}
+
+@media (min-width: 768px) {
+  button {
+    padding: 0 2.6rem;
+  }
 }
